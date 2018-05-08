@@ -357,7 +357,7 @@ user_delete(){
 				echo "Вы не ввели логин удаляемого пользователя, попробуйте еще раз! Если вы не помните логин, то нажмите Ctrl+C и выполните команду ./freebsd-autodeploy.sh listusers для вывода списка пользователей прокси-сервера"
 		fi
 	done
-	if sed "/^${del_username}/d" "$CONFIG_DIR/3proxy.cfg.auth"
+	if sed -i '' "/^${del_username}/d" "$CONFIG_DIR/3proxy.cfg.auth"
 		then
 			echo "Пользователь ${del_username} успешно удален."
 		else
