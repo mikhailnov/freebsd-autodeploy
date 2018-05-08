@@ -16,17 +16,17 @@ read_p(){
 echo_help(){
 	echo "
 Запустите скрипт с одним из параметров:
-	./freebsd-autodeploy 3proxy-setup
+	./freebsd-autodeploy.sh 3proxy-setup
 		3proxy-setup выполнит установку и настройку 3proxy с нуля на вашей системе, в т.ч. настроит FreeBSD (локаль, обновит систему и т.д.), а потом выполнит добавления пользователя (adduser)
-	./freebsd-autodeploy listusers
+	./freebsd-autodeploy.sh listusers
 		listusers выведет список пользователей прокси-сервера с паролями
-	./freebsd-autodeploy serverinfo
+	./freebsd-autodeploy.sh serverinfo
 		serverinfo попробует определить IPv4 и IPv6 адреса вашего прокси-сервера и выведет порты прокси-сервера
-	./freebsd-autodeploy adduser
+	./freebsd-autodeploy.sh adduser
 		adduser запросит имя пользователя и пароль, добавит этого пользователя в 3proxy и перезапустит прокси-сервер
-	./freebsd-autodeploy deluser
+	./freebsd-autodeploy.sh deluser
 		adduser запросит имя пользователя и удалит указанного пользователя
-	./freebsd-autodeploy setup-freebsd
+	./freebsd-autodeploy.sh setup-freebsd
 		Выполнит базовую настройку ОС FreeBSD: настроит русскую локаль, обновит систему
 	"
 }
@@ -37,11 +37,11 @@ uname_os="$(uname --)"
 			CONFIG_DIR="/usr/local/etc/"
 		;;
 		"Linux")
-			echo_err "Вы запустили этот скрипт на Linux, но пока что скрипт может работать только на FreeBSD! (Пулл-реквесты https://github.com/mikhailnov/./freebsd-autodeploy для поддержки других ОС принимаются)"
+			echo_err "Вы запустили этот скрипт на Linux, но пока что скрипт может работать только на FreeBSD! (Пулл-реквесты https://github.com/mikhailnov/./freebsd-autodeploy.sh для поддержки других ОС принимаются)"
 			exit 1
 		;;
 		*)
-			echo_err "Вы запустили скрипт на неизвестной ОС, пока поддерживается только FreeBSD! (Пулл-реквесты https://github.com/mikhailnov/./freebsd-autodeploy для поддержки других ОС принимаются)"
+			echo_err "Вы запустили скрипт на неизвестной ОС, пока поддерживается только FreeBSD! (Пулл-реквесты https://github.com/mikhailnov/./freebsd-autodeploy.sh для поддержки других ОС принимаются)"
 			exit 1
 		;;
 	esac
@@ -353,7 +353,7 @@ user_delete(){
 			then
 				break
 			else
-				echo "Вы не ввели логин удаляемого пользователя, попробуйте еще раз! Если вы не помните логин, то нажмите Ctrl+C и выполните команду ./freebsd-autodeploy listusers для вывода списка пользователей прокси-сервера"
+				echo "Вы не ввели логин удаляемого пользователя, попробуйте еще раз! Если вы не помните логин, то нажмите Ctrl+C и выполните команду ./freebsd-autodeploy.sh listusers для вывода списка пользователей прокси-сервера"
 		fi
 		if sed "/^${del_username}/d" "$CONFIG_DIR/3proxy.cfg.auth"
 			then
