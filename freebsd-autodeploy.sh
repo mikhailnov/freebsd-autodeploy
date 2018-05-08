@@ -58,7 +58,7 @@ freebsd_initial_setup(){
 	# this function must work in POSIX shell, because bash is not installed by default
 	# pkg is not installed by default
 	# without env it will not work in csh
-	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash
+	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash nano git
 	pkg update
 	pkg upgrade -y
 	#freebsd-update -F fetch install
@@ -120,15 +120,41 @@ freebsd_initial_setup(){
 		EOF
 		
 		cap_mkdb /etc/login.conf
+		
 		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!"
 		echo "Vyidite iz SSH, zaidite snova i zapustite script zanovo, chtoby zarabotaly russkiye burvy v konsoli!"
 		exit
 	fi
 	
+	sed -i '' "/#freebsd-autodeploy/d" /etc/profile
+	echo "LANG=ru_RU.UTF-8; export LANG #freebsd-autodeploy" >>/etc/profile
+	echo "MM_CHARSET=UTF-8; export MM_CHARSET #freebsd-autodeploy" >>/etc/profile
+	sh /etc/profile
+	
 	bash_path="/usr/local/bin/bash"
 	if [ -x "$bash_path" ]; then
 		chsh -s "$bash_path" root && echo "Шелл пользователя root изменен на bash для удобства администрирования системы"
 	fi 
+	
+	mkdir -p /usr/local/bin/
+	#cron_file="/usr/local/etc/cron.d/system-autoupdate"
+	cron_file="/etc/crontab"
+	autoupdate_script="/usr/local/bin/system-autoupdate"
+	sed -i '' "/system-autoupdate/d" "$cron_file"
+	rm -fv "$autoupdate_script"
+	cat > "$autoupdate_script" <<-EOF
+	#!/bin/sh
+	# by freebsd-autodeploy
+	pkg update
+	sync
+	sleep 1
+	pkg upgrade -y
+	sync
+	EOF
+	#echo "MAILTO=\"\" " >> "$cron_file"
+	echo "0 * * * * root ${autoupdate_script}" >> "$cron_file"
+	chmod +x "$autoupdate_script"
+	#chmod +x "$cron_file"
 }
 
 proxy_setup(){
@@ -328,7 +354,7 @@ user_add(){
 		echo ""
 		echo "Введите желаемое имя пользователя (логин) для нового пользователя прокси-сервера:"
 		read -r new_username
-		echo "Введите пароль для нового пользователя с логином $new_username"
+		echo "Введите пароль для нового пользователя с логином ${new_username}:"
 		read -r new_userpassword
 		if [ ! -z "$new_username" ] && [ ! -z "$new_userpassword" ]
 			then
