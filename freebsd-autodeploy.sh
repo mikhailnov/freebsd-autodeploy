@@ -223,6 +223,7 @@ proxy_setup(){
 	PORT_SOCKS="$((PORT_HTTP+1))"
 
 	LOG_DIR="/var/log/3proxy/"
+	rm -fvr "$LOG_DIR"
 	if ( mkdir -p "$LOG_DIR" && chown -R proxy:proxy "LOG_DIR" )
 		then
 			echo ""
