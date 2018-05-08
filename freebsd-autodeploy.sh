@@ -139,7 +139,7 @@ proxy_setup(){
 			echo "Пользователь proxy не найден, создадим его"
 			#echo "proxy:*:62:62:Packet Filter pseudo-user:/nonexistent:/usr/sbin/nologin" >>/etc/passwd
 			#pw adduser proxy1 -g proxy1 -d /nonexistent -s /usr/sbin/nologin -c "Packet Filter pseudo-user"
-			if awk -F":" '{print $3}' /etc/passwd | grep -Fq "^62$"
+			if awk -F":" '{print $3}' /etc/passwd | grep -Fq ^62$
 				then 
 					C_UID="62"
 				else
