@@ -58,7 +58,7 @@ freebsd_initial_setup(){
 	# this function must work in POSIX shell, because bash is not installed by default
 	# pkg is not installed by default
 	# without env it will not work in csh
-	env ASSUME_ALWAYS_YES=yes pkg install pkg
+	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash
 	pkg update
 	pkg upgrade -y
 	#freebsd-update -F fetch install
@@ -122,6 +122,11 @@ freebsd_initial_setup(){
 		cap_mkdb /etc/login.conf
 		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!" && exit
 	fi
+	
+	bash_path="/usr/local/bin/bash"
+	if [ -x "$bash_path" ]; then
+		chsh -s "$bash_path" root && echo "Шелл пользователя root изменен на bash для удобства администрирования системы"
+	fi 
 }
 
 proxy_setup(){
@@ -262,9 +267,11 @@ proxy_setup(){
 	# users username:CL:password
 	users \$${CONFIG_DIR}3proxy.cfg.auth
 
+	# not TOR
 	proxy -p${PORT_HTTP}
 	socks -p${PORT_SOCKS}
 	dnspr 
+	
 	EOF
 }
 
@@ -275,8 +282,8 @@ print_server_info(){
 	#SITE_IPv4="$(host -t A wtfismyip.com | rev | cut -d " " -f1 | rev)"
 	MY_IPv4="$(curl -4 -- "http://wtfismyip.com/text" 2>/dev/null )"
 	MY_IPv6="$(curl -6 -- "http://wtfismyip.com/text" 2>/dev/null )"
-	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^proxy -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
-	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^socks -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
+	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "not TOR" -A2 | grep "^proxy -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
+	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "not TOR" -A2 | grep "^socks -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
 	echo ""
 	echo ""
 	echo ""
@@ -295,6 +302,7 @@ service_restart(){
 		then
 			# расскоментировать, когда проверка заработает
 			#echo "Сервис 3proxy успешно (пере)запущен!"
+			echo >/dev/null
 		else
 			echo_err "ОШИБКА (пере)запуска сервиса 3proxy!"
 	fi
