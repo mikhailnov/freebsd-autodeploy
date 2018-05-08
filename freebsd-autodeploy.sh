@@ -58,7 +58,7 @@ freebsd_initial_setup(){
 	# this function must work in POSIX shell, because bash is not installed by default
 	# pkg is not installed by default
 	# without env it will not work in csh
-	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash nano
+	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash nano git
 	pkg update
 	pkg upgrade -y
 	#freebsd-update -F fetch install
