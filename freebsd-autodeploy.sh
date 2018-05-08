@@ -223,11 +223,11 @@ proxy_setup(){
 	PORT_SOCKS="$((PORT_HTTP+1))"
 
 	LOG_DIR="/var/log/3proxy/"
-	rm -fvr "$LOG_DIR"
-	if ( mkdir -p "$LOG_DIR" && chown -R proxy:proxy "LOG_DIR" )
+	rm -fvr "${LOG_DIR}"
+	if ( mkdir -p "$LOG_DIR" && chown -R proxy:proxy "${LOG_DIR}" )
 		then
 			echo ""
-			logs_string="log $LOG_DIR D"
+			logs_string="log ${LOG_DIR} D"
 		else
 			echo_err "Не удалось создать папку $LOG_DIR для логов прокси-сервера или поставить на нее правильные права, отключаем ведение логов!"
 			logs_string=""
