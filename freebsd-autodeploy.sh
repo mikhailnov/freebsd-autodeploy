@@ -117,10 +117,12 @@ freebsd_initial_setup(){
 			:charset=UTF-8:\
 			:lang=ru_RU.UTF-8:\
 			:tc=default:
-
 		EOF
+		
 		cap_mkdb /etc/login.conf
-		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!" && exit
+		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!"
+		echo "Vyidite s SSH, zaidite snova i zapustite script zanovo, chtoby zarabotaly russkiye burvy v konsoli!"
+		exit
 	fi
 	
 	bash_path="/usr/local/bin/bash"
