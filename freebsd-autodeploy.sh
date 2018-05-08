@@ -132,7 +132,7 @@ proxy_setup(){
 			exit 1
 	fi
 
-	if grep -Fq "proxy\:" /etc/passwd
+	if grep -q "proxy\:" /etc/passwd
 		then
 			echo "Пользователь proxy найден, не будем его создавать"
 		else
@@ -144,7 +144,7 @@ proxy_setup(){
 					C_UID="62"
 				else
 					LAST_UID="$(awk -F":" '{print $3}' /etc/passwd | sort --sort=general-numeric | tail -n 1)"
-					C_UID=$((LAST_UID+1))
+					C_UID=$((LAST_UID+250))
 					echo "Пользователь с UID 62 уже занят, попробуем UID ${C_UID}"
 			fi
 			
