@@ -199,13 +199,7 @@ proxy_setup(){
 			exit 1
 	fi
 
-	if mv -v 3proxy.cfg 3proxy.cfg.bak
-		then
-			echo ""
-		else
-			echo_err "Ошибка перемещения конфига 3proxy (создания его резервной копии), возможно, пакет 3proxy не установился корректно, не можем продолжить работать!"
-			exit 1
-	fi
+	mv -v 3proxy.cfg 3proxy.cfg.bak
 
 	# alias-ы настраиваем, чтобы в будущем скрипт мог работать и на Linux с shuf, и на FreeBSD с gshuf (на ней нет shuf, т.к. это только GNU-утилита из пакета coreutils)
 	if test -f "$(which shuf)"
