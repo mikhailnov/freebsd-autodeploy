@@ -121,7 +121,7 @@ freebsd_initial_setup(){
 		
 		cap_mkdb /etc/login.conf
 		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!"
-		echo "Vyidite s SSH, zaidite snova i zapustite script zanovo, chtoby zarabotaly russkiye burvy v konsoli!"
+		echo "Vyidite iz SSH, zaidite snova i zapustite script zanovo, chtoby zarabotaly russkiye burvy v konsoli!"
 		exit
 	fi
 	
