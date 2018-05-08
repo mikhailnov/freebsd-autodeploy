@@ -58,7 +58,7 @@ freebsd_initial_setup(){
 	# this function must work in POSIX shell, because bash is not installed by default
 	# pkg is not installed by default
 	# without env it will not work in csh
-	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash
+	env ASSUME_ALWAYS_YES=yes pkg install -y pkg bash nano
 	pkg update
 	pkg upgrade -y
 	#freebsd-update -F fetch install
@@ -135,6 +135,26 @@ freebsd_initial_setup(){
 	if [ -x "$bash_path" ]; then
 		chsh -s "$bash_path" root && echo "Шелл пользователя root изменен на bash для удобства администрирования системы"
 	fi 
+	
+	mkdir -p /usr/local/bin/
+	#cron_file="/usr/local/etc/cron.d/system-autoupdate"
+	cron_file="/etc/crontab"
+	autoupdate_script="/usr/local/bin/system-autoupdate"
+	sed -i '' "/system-autoupdate/d" "$cron_file"
+	rm -fv "$autoupdate_script"
+	cat > "$autoupdate_script" <<-EOF
+	#!/bin/sh
+	# by freebsd-autodeploy
+	pkg update
+	sync
+	sleep 1
+	pkg upgrade -y
+	sync
+	EOF
+	#echo "MAILTO=\"\" " >> "$cron_file"
+	echo "0 * * * * root ${autoupdate_script}" >> "$cron_file"
+	chmod +x "$autoupdate_script"
+	#chmod +x "$cron_file"
 }
 
 proxy_setup(){
