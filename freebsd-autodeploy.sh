@@ -201,18 +201,18 @@ proxy_setup(){
 
 	mv -v 3proxy.cfg 3proxy.cfg.bak
 
-	# alias-ы настраиваем, чтобы в будущем скрипт мог работать и на Linux с shuf, и на FreeBSD с gshuf (на ней нет shuf, т.к. это только GNU-утилита из пакета coreutils)
+	# переменные как алиасы настраиваем, чтобы в будущем скрипт мог работать и на Linux с shuf, и на FreeBSD с gshuf (на ней нет shuf, т.к. это только GNU-утилита из пакета coreutils)
 	if test -f "$(which shuf)"
 		then
-			alias shuf="$(which shuf)"
+			shuf="$(which shuf)"
 		else
-			test -f "$(which gshuf)" && alias shuf="$(which gshuf)"
+			test -f "$(which gshuf)" && shuf="$(which gshuf)"
 	fi
 
-	if shuf --version >/dev/null
+	if "$shuf" --version >/dev/null
 		then
 			echo ""
-			PORT_HTTP="$(shuf -i30000-70000 -n1)"
+			PORT_HTTP="$($shuf -i30000-70000 -n1)"
 		else
 			echo_err "Утилита shuf/gshuf не найдена в системе, она должна принадлежать пакету coreutils, который мы уже установили, не можем сгенерировать случайные порты для прокси-сервера"
 			# read -p is not compatible with POSIX shell (/bin/sh in FreeBSD)
