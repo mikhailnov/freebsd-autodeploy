@@ -66,6 +66,8 @@ freebsd_initial_setup(){
 		mv -v /etc/login.conf /etc/login.conf.bak
 		# I took /etc/login.conf from DigitalOcean'f FreeBSD image
 		cat > /etc/login.conf <<-EOF
+		# original /etc/login.conf saved as /etc/login.conf.bak 
+		
 		default:lang=en_US.UTF-8:\
 		:passwd_format=sha512:\
 		:copyright=/etc/COPYRIGHT:\
