@@ -273,8 +273,8 @@ print_server_info(){
 	#SITE_IPv4="$(host -t A wtfismyip.com | rev | cut -d " " -f1 | rev)"
 	MY_IPv4="$(curl -4 -- "http://wtfismyip.com/text" 2>/dev/null )"
 	MY_IPv6="$(curl -6 -- "http://wtfismyip.com/text" 2>/dev/null )"
-	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^proxy -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1)"
-	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^socks -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1)"
+	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^proxy -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
+	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^socks -p" | awk -F "-p" '{print $2}' | sort | uniq | tail -n 1)"
 	echo ""
 	echo ""
 	echo ""
@@ -288,9 +288,11 @@ print_server_info(){
 }
 
 service_restart(){
+	# по факту эта проверка не работает, т.к. init-скрипт 3proxy не вовзращает ненулевой код при неуспешном запуске
 	if service "$1" restart
 		then
-			echo "Сервис 3proxy успешно (пере)запущен!"
+			# расскоментировать, когда проверка заработает
+			#echo "Сервис 3proxy успешно (пере)запущен!"
 		else
 			echo_err "ОШИБКА (пере)запуска сервиса 3proxy!"
 	fi
@@ -354,13 +356,13 @@ user_delete(){
 			else
 				echo "Вы не ввели логин удаляемого пользователя, попробуйте еще раз! Если вы не помните логин, то нажмите Ctrl+C и выполните команду ./freebsd-autodeploy.sh listusers для вывода списка пользователей прокси-сервера"
 		fi
-		if sed "/^${del_username}/d" "$CONFIG_DIR/3proxy.cfg.auth"
-			then
-				echo "Пользователь ${del_username} успешно удален."
-			else
-				echo_err "Ошибка удаления пользователя ${del_username}; возможно вы ввели неправильное имя пользователя"
-		fi
 	done
+	if sed "/^${del_username}/d" "$CONFIG_DIR/3proxy.cfg.auth"
+		then
+			echo "Пользователь ${del_username} успешно удален."
+		else
+			echo_err "Ошибка удаления пользователя ${del_username}; возможно вы ввели неправильное имя пользователя"
+	fi
 }
 
 ##################################################################################
