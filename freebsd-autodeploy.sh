@@ -120,10 +120,16 @@ freebsd_initial_setup(){
 		EOF
 		
 		cap_mkdb /etc/login.conf
+		
 		echo "Please relogin and run this script again! Otherwise Russian language will not work in the console!"
 		echo "Vyidite iz SSH, zaidite snova i zapustite script zanovo, chtoby zarabotaly russkiye burvy v konsoli!"
 		exit
 	fi
+	
+	sed -i '' "/#freebsd-autodeploy/d" /etc/profile
+	echo "LANG=ru_RU.UTF-8; export LANG #freebsd-autodeploy" >>/etc/profile
+	echo "MM_CHARSET=UTF-8; export MM_CHARSET #freebsd-autodeploy" >>/etc/profile
+	sh /etc/profile
 	
 	bash_path="/usr/local/bin/bash"
 	if [ -x "$bash_path" ]; then
