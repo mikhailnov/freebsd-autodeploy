@@ -135,6 +135,8 @@ proxy_setup(){
 	if grep -q "proxy\:" /etc/passwd
 		then
 			echo "Пользователь proxy найден, не будем его создавать"
+			C_UID="$(grep "proxy\:" /etc/passwd | awk -F ":" '{print $3}')"
+			C_GID="$(grep "proxy\:" /etc/passwd | awk -F ":" '{print $4}')"
 		else
 			echo "Пользователь proxy не найден, создадим его"
 			#echo "proxy:*:62:62:Packet Filter pseudo-user:/nonexistent:/usr/sbin/nologin" >>/etc/passwd
@@ -184,11 +186,13 @@ proxy_setup(){
 			exit 1
 	fi
 
-	if echo "threeproxy_enable=\"YES\" " >>/etc/rc.conf
+	if grep -q threeproxy_enable=\"YES\" /etc/rc.conf
 		then
-			echo "Сервис 3proxy добавлен в автозапуск"
+			# remove duplicates from multiple runs of the script
+			sed -i '' '/threeproxy_enable/d' /etc/rc.conf
+			echo threeproxy_enable=\"YES\" >>/etc/rc.conf
 		else
-			echo_err "Ошибка добавления сервиса 3proxy в автозапуск"
+			echo threeproxy_enable=\"YES\" >>/etc/rc.conf
 	fi
 
 	if cd "$CONFIG_DIR"
@@ -269,8 +273,8 @@ print_server_info(){
 	#SITE_IPv4="$(host -t A wtfismyip.com | rev | cut -d " " -f1 | rev)"
 	MY_IPv4="$(curl -4 -- "http://wtfismyip.com/text" 2>/dev/null )"
 	MY_IPv6="$(curl -6 -- "http://wtfismyip.com/text" 2>/dev/null )"
-	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^proxy -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1"
-	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^socks -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1"
+	MY_PORT_HTTP="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^proxy -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1)"
+	MY_PORT_SOCKS="$(cat ${CONFIG_DIR}/3proxy.cfg | grep "^socks -p" | awk -F "-p" '{print $2}') | sort | uniq | tail -n 1)"
 	echo ""
 	echo ""
 	echo ""
