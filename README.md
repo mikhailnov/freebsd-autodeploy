@@ -7,4 +7,5 @@ pkg install -y git
 cd 
 git clone https://github.com/mikhailnov/freebsd-autodeploy.git
 cd freebsd-autodeploy
+./freebsd-autodeploy.sh
 ```

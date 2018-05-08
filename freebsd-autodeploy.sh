@@ -13,6 +13,23 @@ read_p(){
 	read -r answer
 	echo "$answer" >/dev/null
 }
+echo_help(){
+	echo "
+Запустите скрипт с одним из параметров:
+	3proxy-autodeploy 3proxy-setup
+		3proxy-setup выполнит установку и настройку 3proxy с нуля на вашей системе, в т.ч. настроит FreeBSD (локаль, обновит систему и т.д.), а потом выполнит добавления пользователя (adduser)
+	3proxy-autodeploy listusers
+		listusers выведет список пользователей прокси-сервера с паролями
+	3proxy-autodeploy serverinfo
+		serverinfo попробует определить IPv4 и IPv6 адреса вашего прокси-сервера и выведет порты прокси-сервера
+	3proxy-autodeploy adduser
+		adduser запросит имя пользователя и пароль, добавит этого пользователя в 3proxy и перезапустит прокси-сервер
+	3proxy-autodeploy deluser
+		adduser запросит имя пользователя и удалит указанного пользователя
+	3proxy-autodeploy setup-freebsd
+		Выполнит базовую натсройку ОС FreeBSD: настроит русскую локаль, обновит систему
+	"
+}
 uname_os="$(uname --)"
 	case "$uname_os" in
 		"FreeBSD")
@@ -376,20 +393,6 @@ case "$1" in
 		print_server_info
 	;;
 	*)
-		echo "
-		Запустите скрипт с одним из параметров:
-			3proxy-autodeploy 3proxy-setup
-				3proxy-setup выполнит установку и настройку 3proxy с нуля на вашей системе, в т.ч. настроит FreeBSD (локаль, обновит систему и т.д.), а потом выполнит добавления пользователя (adduser)
-			3proxy-autodeploy listusers
-				listusers выведет список пользователей прокси-сервера с паролями
-			3proxy-autodeploy serverinfo
-				serverinfo попробует определить IPv4 и IPv6 адреса вашего прокси-сервера и выведет порты прокси-сервера
-			3proxy-autodeploy adduser
-				adduser запросит имя пользователя и пароль, добавит этого пользователя в 3proxy и перезапустит прокси-сервер
-			3proxy-autodeploy deluser
-				adduser запросит имя пользователя и удалит указанного пользователя
-			3proxy-autodeploy setup-freebsd
-				Выполнит базовую натсройку ОС FreeBSD: настроит русскую локаль, обновит систему
-		"
+		echo_help
 	;;
 esac
