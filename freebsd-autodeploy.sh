@@ -334,7 +334,7 @@ user_add(){
 		echo ""
 		echo "Введите желаемое имя пользователя (логин) для нового пользователя прокси-сервера:"
 		read -r new_username
-		echo "Введите пароль для нового пользователя с логином $new_username"
+		echo "Введите пароль для нового пользователя с логином ${new_username}:"
 		read -r new_userpassword
 		if [ ! -z "$new_username" ] && [ ! -z "$new_userpassword" ]
 			then

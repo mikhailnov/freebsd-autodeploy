@@ -1,5 +1,5 @@
-# 3proxy-autodeploy
-Script for autodeploying 3proxy simple proxy server (currently on FreeBSD)
+# 3proxy on FreeBSD autodeploy
+Script for autodeploying 3proxy simple proxy server (currently on FreeBSD) <br>
 License: GPLv3
 
 ```
